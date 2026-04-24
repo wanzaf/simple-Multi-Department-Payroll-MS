@@ -8,16 +8,76 @@ A Laravel 12 web application for managing employees, departments, and payroll re
 
 Make sure the following are installed on your machine before proceeding.
 
-| Requirement           | Version                  |
-| --------------------- | ------------------------ |
-| PHP                   | >= 8.2                   |
-| Composer              | >= 2.x                   |
-| Node.js               | >= 18.x                  |
-| npm                   | >= 9.x                   |
-| MySQL                 | >= 5.7 / MariaDB >= 10.x |
-| XAMPP (or equivalent) | Any recent version       |
+| Requirement           | Version                        |
+| --------------------- | ------------------------------ |
+| PHP                   | >= 8.2                         |
+| Composer              | >= 2.x                         |
+| Node.js               | >= 18.x                        |
+| npm                   | >= 9.x (included with Node.js) |
+| MySQL                 | >= 5.7 / MariaDB >= 10.x       |
+| XAMPP (or equivalent) | Any recent version             |
 
-> **Recommended:** Use [XAMPP](https://www.apachefriends.org/) which bundles PHP, MySQL (MariaDB), and Apache. After installing, add `C:\xampp\php` and `C:\xampp\mysql\bin` to your system `PATH` so `php`, `composer`, and `mysql` are accessible from any terminal.
+> XAMPP bundles **PHP**, **MySQL (MariaDB)**, and **Apache** in one installer — installing it covers three requirements at once.
+
+---
+
+### Installing the Requirements (Windows — Command Prompt)
+
+The commands below use **winget** (Windows Package Manager), which is built into Windows 10/11. Open **Command Prompt as Administrator** and run:
+
+**1. XAMPP** (installs PHP 8.2 + MySQL + Apache)
+
+```cmd
+winget install ApacheFriends.Xampp.8.2
+```
+
+After installing, add these two folders to your system PATH:
+
+- `C:\xampp\php`
+- `C:\xampp\mysql\bin`
+
+To add to PATH via Command Prompt (run as Administrator):
+
+```cmd
+setx /M PATH "%PATH%;C:\xampp\php;C:\xampp\mysql\bin"
+```
+
+Then **close and reopen** Command Prompt for the change to take effect.
+
+**2. Composer** (PHP dependency manager)
+
+```cmd
+winget install Composer.Composer
+```
+
+**3. Node.js + npm** (npm is included automatically)
+
+```cmd
+winget install OpenJS.NodeJS.LTS
+```
+
+**4. Git** (only needed if cloning from GitHub)
+
+```cmd
+winget install Git.Git
+```
+
+---
+
+### Verify everything is installed
+
+Open a **new** Command Prompt and run:
+
+```cmd
+php -v
+composer -V
+node -v
+npm -v
+mysql --version
+git --version
+```
+
+Each command should print a version number. If any shows `'command not found'`, make sure the PATH was updated and restart Command Prompt.
 
 ---
 
@@ -31,7 +91,7 @@ Copy the project folder into your XAMPP htdocs directory:
 C:\xampp\htdocs\assessment-2\
 ```
 
-Or clone via git:
+Or clone via git ON Command Promt:
 
 ```bash
 git clone https://github.com/wanzaf/simple-Multi-Department-Payroll-MS C:\xampp\htdocs\assessment-2
