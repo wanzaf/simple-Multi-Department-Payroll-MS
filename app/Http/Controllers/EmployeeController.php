@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Employee;
 use App\Models\Department;
 use Illuminate\Http\Request;
+use Illuminate\Database\QueryException;
 
 class EmployeeController extends Controller
 {
@@ -120,8 +121,17 @@ class EmployeeController extends Controller
     public function apiDestroy($id)
     {
         $employee = Employee::findOrFail($id);
-        $employee->delete();
 
-        return response()->json(['message' => 'Employee deleted.']);
+        try {
+            $employee->delete();
+            return response()->json(['message' => 'Employee deleted.']);
+        } catch (QueryException $e) {
+            if ($e->errorInfo[1] == 1451) {
+                return response()->json([
+                    'message' => 'This employee still has payroll records.'
+                ], 409);
+            }
+            throw $e;
+        }
     }
 }

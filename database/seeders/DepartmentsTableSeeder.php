@@ -1,9 +1,9 @@
 <?php
 
 namespace Database\Seeders;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class DepartmentsTableSeeder extends Seeder
 {
@@ -40,6 +40,62 @@ class DepartmentsTableSeeder extends Seeder
                 'name' => 'Engineering',
                 'created_at' => '2026-04-23 13:24:04',
                 'updated_at' => '2026-04-23 13:24:04',
+            ),
+            3 => 
+            array (
+                'id' => 6,
+                'name' => 'Information Technology',
+                'created_at' => '2026-04-24 10:35:42',
+                'updated_at' => '2026-04-24 10:35:42',
+            ),
+            4 => 
+            array (
+                'id' => 7,
+                'name' => 'Marketing',
+                'created_at' => '2026-04-24 10:35:42',
+                'updated_at' => '2026-04-24 10:35:42',
+            ),
+            5 => 
+            array (
+                'id' => 8,
+                'name' => 'Sales',
+                'created_at' => '2026-04-24 10:35:42',
+                'updated_at' => '2026-04-24 10:35:42',
+            ),
+            6 => 
+            array (
+                'id' => 9,
+                'name' => 'Operations',
+                'created_at' => '2026-04-24 10:35:42',
+                'updated_at' => '2026-04-24 10:35:42',
+            ),
+            7 => 
+            array (
+                'id' => 10,
+                'name' => 'Research & Development',
+                'created_at' => '2026-04-24 10:35:42',
+                'updated_at' => '2026-04-24 10:35:42',
+            ),
+            8 => 
+            array (
+                'id' => 11,
+                'name' => 'Customer Support',
+                'created_at' => '2026-04-24 10:35:42',
+                'updated_at' => '2026-04-24 10:35:42',
+            ),
+            9 => 
+            array (
+                'id' => 12,
+                'name' => 'Legal',
+                'created_at' => '2026-04-24 10:35:42',
+                'updated_at' => '2026-04-24 10:35:42',
+            ),
+            10 => 
+            array (
+                'id' => 13,
+                'name' => 'Administration',
+                'created_at' => '2026-04-24 10:35:42',
+                'updated_at' => '2026-04-24 10:35:42',
             ),
         ));
         

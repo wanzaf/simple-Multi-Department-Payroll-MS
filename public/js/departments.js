@@ -1,5 +1,12 @@
 const CSRF = document.querySelector('meta[name="csrf-token"]').content;
 
+let allDepts = [];
+let currentPage = 1;
+
+function getPerPage() {
+    return parseInt(document.getElementById("perPage").value);
+}
+
 function escapeHtml(str) {
     return String(str)
         .replace(/&/g, "&amp;")
@@ -26,61 +33,154 @@ function showToast(msg, type = "success") {
 
 async function loadDepartments() {
     const tbody = document.getElementById("deptTableBody");
+    tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><p>Loading…</p></div></td></tr>`;
+    document.getElementById("paginationBar").style.display = "none";
 
     try {
         const res = await fetch("/api/departments");
-        const data = await res.json();
-
-        if (!data.length) {
-            tbody.innerHTML = `
-                <tr><td colspan="5">
-                    <div class="empty-state">
-                        <p>No departments yet. Create one.</p>
-                    </div>
-                </td></tr>`;
-            return;
-        }
-
-        tbody.innerHTML = data
-            .map(
-                (dept, i) => `
-            <tr id="row-${dept.id}">
-                <td class="td-muted">${i + 1}</td>
-                <td>
-                    <div class="cmsp-cell-title">${escapeHtml(dept.name)}</div>
-                </td>
-                <td class="td-muted">${dept.employees_count || 0}</td>
-                <td class="td-muted">${formatDate(dept.created_at)}</td>
-                <td>
-                    <div class="cmsp-row-actions">
-                        <button class="cmsp-icon-btn cmsp-icon-btn--edit"
-                            onclick="openEditModal(${dept.id}, '${escapeHtml(dept.name).replace(/'/g, "\\'")}')" 
-                            title="Edit department">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"
-                                stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
-                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-                            </svg>
-                        </button>
-                        <button class="cmsp-icon-btn cmsp-icon-btn--delete"
-                            onclick="deleteDept(${dept.id}, '${escapeHtml(dept.name).replace(/'/g, "\\'")}')" 
-                            title="Delete department">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"
-                                stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
-                                <polyline points="3 6 5 6 21 6"/>
-                                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-                                <path d="M10 11v6"/><path d="M14 11v6"/>
-                                <path d="M9 6V4h6v2"/>
-                            </svg>
-                        </button>
-                    </div>
-                </td>
-            </tr>`,
-            )
-            .join("");
+        allDepts = await res.json();
+        currentPage = 1;
+        renderPage();
     } catch (err) {
         tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><p>Failed to load departments.</p></div></td></tr>`;
     }
+}
+
+function renderPage() {
+    const tbody = document.getElementById("deptTableBody");
+    const perPage = getPerPage();
+    const total = allDepts.length;
+
+    if (!total) {
+        tbody.innerHTML = `
+            <tr><td colspan="5">
+                <div class="empty-state">
+                    <p>No departments yet. Create one.</p>
+                </div>
+            </td></tr>`;
+        document.getElementById("paginationBar").style.display = "none";
+        return;
+    }
+
+    let pageDepts;
+    let lastPage = 1;
+
+    if (perPage === 0) {
+        pageDepts = allDepts;
+        currentPage = 1;
+    } else {
+        lastPage = Math.ceil(total / perPage);
+        currentPage = Math.min(currentPage, lastPage);
+        const start = (currentPage - 1) * perPage;
+        pageDepts = allDepts.slice(start, start + perPage);
+    }
+
+    const globalOffset = perPage === 0 ? 0 : (currentPage - 1) * perPage;
+
+    tbody.innerHTML = pageDepts
+        .map(
+            (dept, i) => `
+        <tr id="row-${dept.id}">
+            <td class="td-muted">${globalOffset + i + 1}</td>
+            <td>
+                <div class="cmsp-cell-title">${escapeHtml(dept.name)}</div>
+            </td>
+            <td class="td-muted">${dept.employees_count || 0}</td>
+            <td class="td-muted">${formatDate(dept.created_at)}</td>
+            <td>
+                <div class="cmsp-row-actions">
+                    <button class="cmsp-icon-btn cmsp-icon-btn--edit"
+                        onclick="openEditModal(${dept.id}, '${escapeHtml(dept.name).replace(/'/g, "\\'")}')"
+                        title="Edit department">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"
+                            stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                    </button>
+                    <button class="cmsp-icon-btn cmsp-icon-btn--delete"
+                        onclick="deleteDept(${dept.id}, '${escapeHtml(dept.name).replace(/'/g, "\\'")}')"
+                        title="Delete department">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"
+                            stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
+                            <polyline points="3 6 5 6 21 6"/>
+                            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                            <path d="M10 11v6"/><path d="M14 11v6"/>
+                            <path d="M9 6V4h6v2"/>
+                        </svg>
+                    </button>
+                </div>
+            </td>
+        </tr>`,
+        )
+        .join("");
+
+    if (perPage === 0) {
+        document.getElementById("paginationBar").style.display = "none";
+    } else {
+        renderPagination(total, perPage, lastPage);
+    }
+}
+
+function renderPagination(total, perPage, lastPage) {
+    const bar = document.getElementById("paginationBar");
+    const info = document.getElementById("paginationInfo");
+    const btns = document.getElementById("paginationBtns");
+
+    const start = (currentPage - 1) * perPage + 1;
+    const end = Math.min(currentPage * perPage, total);
+    info.textContent = `Showing ${start}–${end} of ${total} departments`;
+
+    btns.innerHTML = "";
+
+    const btn = (label, page, disabled = false, active = false) => {
+        const el = document.createElement("button");
+        el.className = `btn ${active ? "btn-primary" : "btn-ghost"}`;
+        el.style.cssText = "min-width:32px;padding:4px 8px;font-size:.8125rem";
+        el.textContent = label;
+        el.disabled = disabled;
+        if (!disabled) el.onclick = () => goToPage(page);
+        btns.appendChild(el);
+    };
+
+    btn("‹", currentPage - 1, currentPage === 1);
+
+    if (lastPage <= 7) {
+        for (let p = 1; p <= lastPage; p++) btn(p, p, false, p === currentPage);
+    } else {
+        btn(1, 1, false, currentPage === 1);
+        if (currentPage > 3) {
+            const ellipsis = document.createElement("span");
+            ellipsis.textContent = "…";
+            ellipsis.style.cssText =
+                "padding:4px 2px;font-size:.8125rem;color:var(--dash-muted)";
+            btns.appendChild(ellipsis);
+        }
+        for (
+            let p = Math.max(2, currentPage - 1);
+            p <= Math.min(lastPage - 1, currentPage + 1);
+            p++
+        ) {
+            btn(p, p, false, p === currentPage);
+        }
+        if (currentPage < lastPage - 2) {
+            const ellipsis = document.createElement("span");
+            ellipsis.textContent = "…";
+            ellipsis.style.cssText =
+                "padding:4px 2px;font-size:.8125rem;color:var(--dash-muted)";
+            btns.appendChild(ellipsis);
+        }
+        btn(lastPage, lastPage, false, currentPage === lastPage);
+    }
+
+    btn("›", currentPage + 1, currentPage === lastPage);
+
+    bar.style.display = "flex";
+}
+
+function goToPage(page) {
+    currentPage = page;
+    renderPage();
 }
 
 function openModal() {
@@ -262,12 +362,9 @@ async function deleteDept(id, name) {
             return;
         }
 
-        document.getElementById(`row-${id}`)?.remove();
+        allDepts = allDepts.filter((d) => d.id !== id);
         showToast(`Department "${name}" deleted.`);
-
-        if (!document.querySelector("#deptTableBody tr[id]")) {
-            loadDepartments();
-        }
+        renderPage();
     } catch (err) {
         showToast("Network error. Please try again.", "error");
     }

@@ -14,6 +14,7 @@
             <p class="dash-welcome__greeting">Organization</p>
             <h1 class="dash-welcome__title">Departments</h1>
         </div>
+        <div style="display:flex;gap:.75rem;align-items:center">
         <button onclick="openModal()" class="cmsp-btn-primary">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                 stroke-linecap="round" stroke-linejoin="round" width="15" height="15">
@@ -22,6 +23,13 @@
             </svg>
             Add New Department
         </button>
+        <select id="perPage" class="form-input" style="min-width:55px" onchange="currentPage=1;renderPage()">
+            <option value="10" selected>10 / page</option>
+            <option value="50">50 / page</option>
+            <option value="100">100 / page</option>
+            <option value="0">Show All</option>
+        </select>
+    </div>
     </div>
 
     <div class="dash-section" style="animation-delay:.15s">
@@ -46,6 +54,14 @@
                     </tr>
                 </tbody>
             </table>
+        </div>
+
+        <div id="paginationBar"
+             style="display:none;align-items:center;justify-content:space-between;
+                    gap:1rem;padding:12px 0;flex-wrap:wrap">
+            <p id="paginationInfo"
+               style="margin:0;font-size:.8125rem;color:var(--dash-muted)"></p>
+            <div id="paginationBtns" style="display:flex;gap:4px;flex-wrap:wrap"></div>
         </div>
     </div>
 

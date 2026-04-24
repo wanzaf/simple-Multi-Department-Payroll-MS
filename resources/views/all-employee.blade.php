@@ -30,6 +30,12 @@
             </svg>
             Add New Employee
         </button>
+            <select id="perPage" class="form-input" style="min-width:55px" onchange="currentPage=1;renderPage()">
+                <option value="10" selected>10 / page</option>
+                <option value="50">50 / page</option>
+                <option value="100">100 / page</option>
+                <option value="0">Show All</option>
+            </select>
         </div>
     </div>
 
@@ -60,6 +66,14 @@
                     </tr>
                 </tbody>
             </table>
+        </div>
+
+        <div id="paginationBar"
+             style="display:none;align-items:center;justify-content:space-between;
+                    gap:1rem;padding:12px 0;flex-wrap:wrap">
+            <p id="paginationInfo"
+               style="margin:0;font-size:.8125rem;color:var(--dash-muted)"></p>
+            <div id="paginationBtns" style="display:flex;gap:4px;flex-wrap:wrap"></div>
         </div>
     </div>
 
