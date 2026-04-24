@@ -1,8 +1,6 @@
 {
-    "agents": [
-        "copilot"
-    ],
-    "mcp": true,
+    "agents": ["copilot"],
+    "mcp": false,
     "nightwatch_mcp": false,
     "sail": false
 }
