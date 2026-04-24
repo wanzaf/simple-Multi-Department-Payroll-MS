@@ -8,14 +8,14 @@ A Laravel 12 web application for managing employees, departments, and payroll re
 
 Make sure the following are installed on your machine before proceeding.
 
-| Requirement | Version |
-|---|---|
-| PHP | >= 8.2 |
-| Composer | >= 2.x |
-| Node.js | >= 18.x |
-| npm | >= 9.x |
-| MySQL | >= 5.7 / MariaDB >= 10.x |
-| XAMPP (or equivalent) | Any recent version |
+| Requirement           | Version                  |
+| --------------------- | ------------------------ |
+| PHP                   | >= 8.2                   |
+| Composer              | >= 2.x                   |
+| Node.js               | >= 18.x                  |
+| npm                   | >= 9.x                   |
+| MySQL                 | >= 5.7 / MariaDB >= 10.x |
+| XAMPP (or equivalent) | Any recent version       |
 
 > **Recommended:** Use [XAMPP](https://www.apachefriends.org/) which bundles PHP, MySQL (MariaDB), and Apache. After installing, add `C:\xampp\php` and `C:\xampp\mysql\bin` to your system `PATH` so `php`, `composer`, and `mysql` are accessible from any terminal.
 
@@ -34,7 +34,7 @@ C:\xampp\htdocs\assessment-2\
 Or clone via git:
 
 ```bash
-git clone <your-repo-url> C:\xampp\htdocs\assessment-2
+git clone https://github.com/wanzaf/simple-Multi-Department-Payroll-MS C:\xampp\htdocs\assessment-2
 cd C:\xampp\htdocs\assessment-2
 ```
 
@@ -121,12 +121,12 @@ Open **http://localhost:8000** in your browser.
 
 These accounts are created by `php artisan db:seed`.
 
-| Name | Email | Password |
-|---|---|---|
-| Dev | wannaqib01@gmail.com | `Dev@1234` |
-| test | test@larabel.com.my | `test1234` |
+| Name | Email                | Password |
+| ---- | -------------------- | -------- |
+| Dev  | wannaqib01@gmail.com | `a`      |
+| test | test@larabel.com.my  | `a`      |
 
-> If login fails with the seeded accounts, you can register a new account from the Register page — registration is open to anyone.
+> If login fails with the seeded accounts, you can register a new account from the Register page, this system dont have email verification.
 
 ---
 
@@ -165,19 +165,19 @@ routes/
 
 - User authentication (login, register, logout)
 - Dashboard with summary statistics (total employees, departments, payroll total, monthly net pay)
-- Department management — create, edit, delete
-- Employee management — create, edit, delete, linked to departments
-- Payroll processing — bulk generate payroll records for employees
-- Payroll history — filter and view past records
-- Payslip view — printable payslip per payroll record
+- Department management - create, edit, delete
+- Employee management - create, edit, delete, linked to departments
+- Payroll processing - bulk generate payroll records for employees
+- Payroll history - filter and view past records
+- Payslip view - printable payslip per payroll record
 
 ---
 
 ## Assumptions & Decisions
 
-- **No roles or permissions** — any registered or seeded user can access all pages.
-- **MySQL only** — migrations use MySQL-specific column options (`useCurrentOnUpdate`). SQLite is not supported.
-- **XAMPP on Windows** — setup steps above target Windows + XAMPP. On macOS/Linux replace `C:\xampp\...` paths with `/opt/lampp/...` or your system equivalents, and use `cp` instead of `copy`.
-- **`mysqldump` not required** — database state is captured via migrations and seeders, not a SQL dump.
-- **`.env` not committed** — environment config is excluded from version control. Always start from `.env.example`.
-- **Dev-only packages** — `kitloong/laravel-migrations-generator` and `orangehill/iseed` are `require-dev` dependencies used to regenerate migration/seeder files from a live database. They are not needed to run the app.
+- **No roles or permissions** - any registered or seeded user can access all pages.
+- **MySQL only** - migrations use MySQL-specific column options (`useCurrentOnUpdate`). SQLite is not supported.
+- **XAMPP on Windows** - setup steps above target Windows + XAMPP. On macOS/Linux replace `C:\xampp\...` paths with `/opt/lampp/...` or your system equivalents, and use `cp` instead of `copy`.
+- **`mysqldump` not required** - database state is captured via migrations and seeders, not a SQL dump.
+- **`.env` not committed** - environment config is excluded from version control. Always start from `.env.example`.
+- **Dev-only packages** - `kitloong/laravel-migrations-generator` and `orangehill/iseed` are `require-dev` dependencies used to regenerate migration/seeder files from a live database. They are not needed to run the app.
